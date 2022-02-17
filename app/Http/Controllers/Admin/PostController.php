@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Post;
+use App\Category;
 
 class PostController extends Controller
 {
@@ -20,6 +21,10 @@ class PostController extends Controller
       return view("admin.index", compact("posts"));
     }
 
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -27,8 +32,12 @@ class PostController extends Controller
      */
     public function create()
     {
-      return view("admin.create");
+      $categories = Category::all();
+      return view("admin.create", compact("categories"));
     }
+
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -42,7 +51,8 @@ class PostController extends Controller
       $request->validate([
         "title" => "required|string|max:100",
         "content" => "required|string",
-        "published" => "sometimes|accepted"
+        "published" => "sometimes|accepted",
+        "category_id" => "nullable|exists:categories,id"
       ]);
       // create
       $data = $request->all();
@@ -61,11 +71,15 @@ class PostController extends Controller
 
       $newPost->content = $data["content"];
       $newPost->posted = isset($data["posted"]);
+      $newPost->category_id = $data["category_id"];
 
       $newPost->save();
       // redirect
       return redirect()->route("posts.show", $newPost->id);
     }
+
+
+
 
     /**
      * Display the specified resource.
@@ -78,6 +92,9 @@ class PostController extends Controller
       return view("admin.show", compact("post"));
     }
 
+
+
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -86,8 +103,12 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-      return view("admin.edit", compact("post"));
+      $categories = Category::all();
+      return view("admin.edit", compact("post", "categories"));
     }
+
+
+
 
     /**
      * Update the specified resource in storage.
@@ -121,11 +142,15 @@ class PostController extends Controller
   
         $post->content = $data["content"];
         $post->posted = isset($data["posted"]);
+        $post->category_id = $data["category_id"];
   
         $post->save();
         // redirect
         return redirect()->route("posts.show", $post->id);
     }
+
+
+
 
     /**
      * Remove the specified resource from storage.
