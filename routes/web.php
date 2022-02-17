@@ -24,5 +24,6 @@ Route::prefix("admin")->namespace("Admin")->middleware("auth")->group(function()
   // prendo tutte le rotte della risorsa posts e le uso tratite il controller
   Route::get('/home', 'HomeController@index')->name('home');
   Route::resource("posts", "PostController");
+  Route::resource("categories", "CategoryController");
 });
 
