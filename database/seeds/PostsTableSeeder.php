@@ -17,7 +17,15 @@ class PostsTableSeeder extends Seeder
     for($i = 0; $i < 20; $i++){
       $newPost = new Post;
       $newPost->title = $faker->word(6, true);
-      $newPost->slug = Str::of($newPost->title)->slug("-");
+
+      $slug = Str::of($newPost->title)->slug("-");
+      $counter = 1;
+      while(Post::where("slug", $slug)->first()) {
+        $slug .= "-$counter";
+        $counter++;
+      }
+      $newPost->slug = $slug;
+
       $newPost->content = $faker->text();
       $newPost->posted = rand(0, 1);
       $newPost->save();
