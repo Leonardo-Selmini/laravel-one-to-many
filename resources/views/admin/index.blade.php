@@ -9,6 +9,7 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col">ID</th>
+        <th scope="col">Category</th>
         <th scope="col">Title</th>
         <th scope="col">Slug</th>
         <th scope="col">Description</th>
@@ -21,6 +22,7 @@
       @foreach ($posts as $post)
       <tr>
         <th scope="row">{{$post->id}}</th>
+        <th scope="row">{{isset($post->category->name)? $post->category->name : "╳"}}</th>
         <td><strong>{{$post->title}}</strong></td>
         <td>{{$post->slug}}</td>
         <td>{{$post->content}}</td>
